@@ -1,14 +1,22 @@
-FROM python:3.10.4-slim-buster
-RUN apt update && apt upgrade -y
-RUN apt-get install git curl python3-pip ffmpeg -y
-RUN apt-get -y install git
-RUN apt-get install -y wget python3-pip curl bash neofetch ffmpeg software-properties-common
+FROM python:3.9
+
+# Set the working directory
 WORKDIR /app
-COPY requirements.txt .
 
-RUN pip3 install wheel
-RUN pip3 install --no-cache-dir -U -r requirements.txt
+# Copy all the files
 COPY . .
-EXPOSE 5000
 
-CMD flask run -h 0.0.0.0 -p 5000 & python3 main.py
+# Install the dependencies
+RUN pip install -r requirements.txt
+
+# Set environment variables
+ENV BOT_TOKEN=your-bot-token-here
+ENV API_ID=your-api-id-here
+ENV API_HASH=your-api-hash-here
+ENV MONGO_URI=your-mongo-uri-here
+ENV LOG_CHANNEL=your-log-channel-id
+ENV FORCE_SUB_CHANNEL=your-force-sub-channel-id
+ENV PORT=8080
+
+# Run the bot
+CMD ["bash", "start.sh"]
